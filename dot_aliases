@@ -3,9 +3,9 @@
 # Aliases
 alias zshrc='$EDITOR ~/.zshrc'
 alias ohmyzsh='$EDITOR ~/.oh-my-zsh'
-alias cat='bat'
+# alias cat='bat'
 alias ll='ls -alFh'
-alias search='grep -i -E'
+alias search='grep --color=always -i -E'
 alias hs='history | search'
 
 # Kubernetes
