@@ -10,9 +10,7 @@ export DOCKER_BUILDKIT=1
 export UPDATE_ZSH_DAYS=1
 export GOPATH=~/dev/go
 export HOMEBREW_NO_ENV_HINTS=true
-export ZSH="~/.oh-my-zsh"
 ############################################################################### Paths
-export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 export PATH="$GOPATH/bin:/usr/local/go/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.bin:$PATH"
@@ -23,6 +21,9 @@ export PATH="$HOME/.arkade/bin/:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="~/dev/google-cloud-sdk/bin:$PATH"
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 ############################################################################### ZSH plugins
 ZSH_THEME="agnoster"
 DISABLE_UPDATE_PROMPT="true"
@@ -32,21 +33,22 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
 ############################################################################### ZSH plugins
 plugins=(
-        git
-        direnv
-        kube-ps1
-        golang
-        vscode
-        python
-        docker
-        fzf
-        autojump
-        asdf
-        kubens
-        kubectx
-        tmuxinator
-        command-not-found
-        zsh-autosuggestions
+    git
+    direnv
+    kube-ps1
+    golang
+    vscode
+    python
+    docker
+    fzf
+    autojump
+    asdf
+    kubens
+    kubectx
+    tmuxinator
+    # terraform
+    command-not-found
+    zsh-autosuggestions
 )
 ############################################################################### Editor
 # Preferred editor for local and remote sessions
@@ -77,15 +79,15 @@ if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
 if [ -f "~/.kubectl_aliases" ]; then . "~/.kubectl_aliases"; fi
 if [ -f "$HOME/.asdf/asdf.sh" ]; then . "$HOME/.asdf/asdf.sh"; fi
 if [ -f "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh" ]; then . "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"; fi
-if [ -f "~/dev/google-cloud-sdk/path.zsh.inc" ]; then . "~/dev/google-cloud-sdk/path.zsh.inc"; fi # # The next line updates PATH for the Google Cloud SDK.
+if [ -f "~/dev/google-cloud-sdk/path.zsh.inc" ]; then . "~/dev/google-cloud-sdk/path.zsh.inc"; fi             # # The next line updates PATH for the Google Cloud SDK.
 if [ -f "~/dev/google-cloud-sdk/completion.zsh.inc" ]; then . "~/dev/google-cloud-sdk/completion.zsh.inc"; fi # The next line enables shell command completion for gcloud.
 
-if [ -x kube_ps1 ]; then PS1="$(kube_ps1)"$PS1; fi
-if [ -x direnv ]; then eval "$(direnv hook zsh)"; fi
-if [ -x brew ]; then eval "$(/opt/homebrew/bin/brew shellenv)"; fi
+if [ $(command -v kube_ps1) ]; then PS1="$(kube_ps1)"$PS1; fi
+if [ $(command -v direnv) ]; then eval "$(direnv hook zsh)"; fi
+if [ $(command -v brew) ]; then eval "$(/opt/homebrew/bin/brew shellenv)"; fi
 
-if [ -x starship ]; then "$(starship init zsh)"; fi # Starship prompt: https://starship.rs/
-if [ -x devspace ]; then "source <(devspace completion zsh)"; fi # Devspace: https://devspace.cloud/
+if [ $(command -v starship) ]; then eval "$(starship init zsh)"; fi         # Starship prompt: https://starship.rs/
+if [ $(command -v devspace) ]; then "source <(devspace completion zsh)"; fi # Devspace: https://devspace.cloud/
 
 ############################################################################### Fig env variables
 # Please make sure this block is at the end of this file.
