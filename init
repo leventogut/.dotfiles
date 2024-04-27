@@ -16,7 +16,6 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 if [ -f "$HOME/$ZSH/oh-my-zsh.sh" ]; then . "$HOME/$ZSH/oh-my-zsh.sh"; fi
 ###############################################################################
 # Install Brew & packages
-
 if [[ ${DOT_LIGHT} -eq 0 ]]; then
   export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
 
