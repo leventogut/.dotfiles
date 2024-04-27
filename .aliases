@@ -1,0 +1,40 @@
+# Aliases
+
+alias zshrc='$EDITOR ~/.zshrc'
+alias ohmyzsh='$EDITOR ~/.oh-my-zsh'
+
+# alias cat='bat'
+
+alias ll='ls -alFh'
+alias l='ll'
+alias search='grep --color=always -i -E'
+alias hs='history | search'
+
+# myip/wanips
+
+# <https://unix.stackexchange.com/a/81699/37512>
+
+alias myip=wanip
+alias wanip='dig @resolver4.opendns.com myip.opendns.com +short'
+alias wanip4='dig @resolver4.opendns.com myip.opendns.com +short -4'
+alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'
+
+alias http='http -v -F -h '
+
+# Docker
+
+alias d='docker'
+alias dc='docker compose'
+
+# Kubernetes
+
+alias k='kubectl'
+alias kaf='kubectl apply -f'
+alias kdf='kubectl diff -f'
+alias kgy='kubectl get -o yaml'
+alias kgpo='kubectl get pods'
+
+alias h='helm'
+alias a='ansible'
+alias ab='ansible-playbook'
+alias t="task"

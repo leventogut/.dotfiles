@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+###############################################################################
+set -e
+
+mkdir -p "$HOME/bin"
+mkdir -p "$HOME/dev"
+mkdir -p "$HOME/tmp"
+
+export NONINTERACTIVE=1
+###############################################################################
+# Install OhMyZSH
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+###############################################################################
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+(
+    echo
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+) >>"$HOME/.bashrc"
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Install Brew & packages
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Dependencies
+brew install gcc
+
+# Most used Brew packages
+brew install starship
+echo 'eval "$(starship init bash)"' >>"$HOME/.bashrc"
+
+brew install bash-completion
+brew install shellcheck
+brew install go
+brew install fig
+brew install asdf
+brew install bat
+brew install fzf
+brew install asciinema # need repo
+brew install --cask 1password/tap/1password-cli
+
+# Install asdf & plugins
+brew install asdf
+echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >>"${ZDOTDIR:-~}/.zshrc"
+
+###############################################################################
+
+###############################################################################
+# Install Arkade & cli packages
+curl -sLS https://get.arkade.dev | sh
+
+arkade get \
+    kubectl \
+    helm \
+    kind \
+    popeye \
+    k9s \
+    polaris \
+    terraform \
+    tfsec \
+    pack \
+    nova \
+    minikube \
+    kustomize \
+    kubescape \
+    kubens \
+    kubectx \
+    kube-bench \
+    krew \
+    kops \
+    jq \
+    influx \
+    hostctl \
+    hey \
+    helmfile \
+    gh \
+    flux \
+    dive \
+    buildx \
+    cosign \
+    dagger
+###############################################################################
+python3 -m pip install --user --upgrade httpie
+###############################################################################
+sh -c "$(curl -sfL https://direnv.net/install.sh | bash)"
+chmod +x direnv
+###############################################################################
