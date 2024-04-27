@@ -1,5 +1,9 @@
 [init]
 defaultBranch = main
+[gpg]
+# format = ssh
+# [user]
+# signingkey = /PATH/TO/.SSH/KEY.PUB
 [status]
 short = true
 [url "ssh://git@github.com/"]
