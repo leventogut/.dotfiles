@@ -16,55 +16,57 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.asdf/bin:$PATH"
 export PATH="$HOME/.arkade/bin/:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH="~/dev/google-cloud-sdk/bin:$PATH"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
-    export PATH="/opt/homebrew/opt/curl/bin:$PATH"
-    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
-    export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+  export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
+  export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+  export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+  export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 fi
-############################################################################### ZSH plugins
-ZSH_THEME="agnoster"
-DISABLE_UPDATE_PROMPT="true"
-ENABLE_CORRECTION="false"
-COMPLETION_WAITING_DOTS="true"
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-HIST_STAMPS="yyyy-mm-dd"
+############################################################################### ZSH Configuration
+export ZSH_THEME="agnoster"
+export DISABLE_UPDATE_PROMPT="true"
+export ENABLE_CORRECTION="false"
+export COMPLETION_WAITING_DOTS="true"
+export DISABLE_UNTRACKED_FILES_DIRTY="true"
+export HIST_STAMPS="yyyy-mm-dd"
 ############################################################################### ZSH plugins
 plugins=(
-    sudo
-    common-aliases
-    colorize
-    copybuffer
-    dotenv
-    git
-    direnv
-    fzf
-    autojump
-    command-not-found
-    zsh-autosuggestions
+  sudo
+  common-aliases
+  colorize
+  copybuffer
+  dotenv
+  git
+  direnv
+  fzf
+  autojump
+  command-not-found
+  zsh-autosuggestions
 )
 ############################################################################### Editor
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR='nvim'
+  export EDITOR='nvim'
 else
-    export EDITOR='nvim'
+  export EDITOR='nvim'
+fi
+############################################################################### ssh-agent
+# SSH Agent
+if [ ! -f "$SSH_AUTH_SOCK" ]; then
+  eval "$(ssh-agent)"
+  ssh-add
+  ssh-add -l
 fi
 ############################################################################### Functions
-batdiff() {
-    git diff --name-only --diff-filter=d | xargs bat --diff
-}
-
 listening() {
-    if [ $# -eq 0 ]; then
-        sudo lsof -iTCP -sTCP:LISTEN -n -P
-    elif [ $# -eq 1 ]; then
-        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
-    else
-        echo "Usage: listening [pattern]"
-    fi
+  if [ $# -eq 0 ]; then
+    sudo lsof -iTCP -sTCP:LISTEN -n -P
+  elif [ $# -eq 1 ]; then
+    sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color "$1"
+  else
+    echo "Usage: listening [pattern]"
+  fi
 }
 
 ############################################################################### Source statetments
@@ -76,6 +78,12 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then . "$HOME/.asdf/asdf.sh"; fi
 
 if [ "$(command -v kube_ps1)" ]; then PS1="$(kube_ps1)"$PS1; fi
 if [ "$(command -v direnv)" ]; then eval "$(direnv hook zsh)"; fi
-if [ "$(command -v brew)" ]; then eval "$(/opt/homebrew/bin/brew shellenv)"; fi
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  if [ "$(command -v brew)" ]; then eval "$(/opt/homebrew/bin/brew shellenv)"; fi
+fi
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  if [ "$(command -v brew)" ]; then eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; fi
+fi
 if [ "$(command -v starship)" ]; then eval "$(starship init zsh)"; fi # Starship prompt: https://starship.rs/

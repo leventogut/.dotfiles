@@ -1,40 +1,44 @@
 # Aliases
-
 alias zshrc='$EDITOR ~/.zshrc'
 alias ohmyzsh='$EDITOR ~/.oh-my-zsh'
-
-# alias cat='bat'
-
+if [ "$(command -v bat)" ]; then alias cat='bat'; fi
 alias ll='ls -alFh'
 alias l='ll'
 alias search='grep --color=always -i -E'
 alias hs='history | search'
+alias trunc='cat /dev/null > '
+alias rm='rm -i --preserve-root'
+alias cp='cp -i'
+alias ln='ln -i'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+alias c='clear'
+alias calc='bc'
+alias now='date +"%Y-%m-%d-%H:%M:%S%z"'
+alias tree='tree -L 2'
+
+# Applications
+alias http='http -v -F -h '
+alias h='helm'
+alias a='ansible'
+alias ap='ansible-playbook'
+alias t="task"
+alias d='docker'
+alias dc='docker compose'
 
 # myip/wanips
-
 # <https://unix.stackexchange.com/a/81699/37512>
-
 alias myip=wanip
 alias wanip='dig @resolver4.opendns.com myip.opendns.com +short'
 alias wanip4='dig @resolver4.opendns.com myip.opendns.com +short -4'
 alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'
 
-alias http='http -v -F -h '
-
-# Docker
-
-alias d='docker'
-alias dc='docker compose'
-
 # Kubernetes
-
 alias k='kubectl'
 alias kaf='kubectl apply -f'
 alias kdf='kubectl diff -f'
 alias kgy='kubectl get -o yaml'
 alias kgpo='kubectl get pods'
-
-alias h='helm'
-alias a='ansible'
-alias ab='ansible-playbook'
-alias t="task"

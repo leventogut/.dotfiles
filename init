@@ -1,56 +1,70 @@
 #!/usr/bin/env bash
 ###############################################################################
-set -e
+set +e
 
 mkdir -p "$HOME/bin"
 mkdir -p "$HOME/dev"
 mkdir -p "$HOME/tmp"
 
+DOT_LIGHT=${DOT_LIGHT:-0}
+
 export NONINTERACTIVE=1
+export PATH=$PATH:$HOME/bin
 ###############################################################################
 # Install OhMyZSH
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [ -f "$HOME/$ZSH/oh-my-zsh.sh" ]; then . "$HOME/$ZSH/oh-my-zsh.sh"; fi
 ###############################################################################
+# Install Brew & packages
 
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-(
+if [[ ${DOT_LIGHT} -eq 0 ]]; then
+  export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
+
+  if [ "$(command -v brew)" ]; then /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; fi
+
+  export HOMEBREW_NO_AUTO_UPDATE=1
+  (
     echo
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
-) >>"$HOME/.bashrc"
+  ) >>"$HOME/.bashrc"
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  if [[ -d "/home/linuxbrew/" ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  fi
 
-# Install Brew & packages
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # Dependencies
+  brew install gcc
 
-# Dependencies
-brew install gcc
+  # Most used Brew packages
+  brew install starship
+  echo 'eval "$(starship init bash)"' >>"$HOME/.bashrc"
 
-# Most used Brew packages
-brew install starship
-echo 'eval "$(starship init bash)"' >>"$HOME/.bashrc"
+  brew install bash-completion
+  brew install shellcheck
+  brew install direnv
+  brew install go
+  brew install asdf
+  brew install bat
+  brew install fzf
+  brew install asciinema
+  brew install glow
+  brew install 1password-cli
+  brew install httpie
 
-brew install bash-completion
-brew install shellcheck
-brew install go
-brew install fig
-brew install asdf
-brew install bat
-brew install fzf
-brew install asciinema # need repo
-brew install --cask 1password/tap/1password-cli
+  # Install asdf & plugins
+  brew install asdf
+  echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >>"${ZDOTDIR:-~}/.zshrc"
 
-# Install asdf & plugins
-brew install asdf
-echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >>"${ZDOTDIR:-~}/.zshrc"
+  ###############################################################################
 
-###############################################################################
+  ###############################################################################
+  # Install Arkade & cli packages
+  curl -sLS https://get.arkade.dev | sh
+  chmod 755 arkade
+  mv arkade "$HOME/bin"
+  ln -sf "$HOME/bin/arkade" ark
 
-###############################################################################
-# Install Arkade & cli packages
-curl -sLS https://get.arkade.dev | sh
-
-arkade get \
+  arkade get \
     kubectl \
     helm \
     kind \
@@ -70,19 +84,14 @@ arkade get \
     krew \
     kops \
     jq \
-    influx \
     hostctl \
     hey \
     helmfile \
-    gh \
     flux \
     dive \
     buildx \
     cosign \
-    dagger
-###############################################################################
-python3 -m pip install --user --upgrade httpie
-###############################################################################
-sh -c "$(curl -sfL https://direnv.net/install.sh | bash)"
-chmod +x direnv
-###############################################################################
+    dagger \
+    k3s
+  ###############################################################################
+fi
