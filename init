@@ -53,9 +53,6 @@ if [[ ${DOT_LIGHT} -eq 0 ]]; then
   # Install asdf & plugins
   brew install asdf
   echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >>"${ZDOTDIR:-~}/.zshrc"
-
-  ###############################################################################
-
   ###############################################################################
   # Install Arkade & cli packages
   curl -sLS https://get.arkade.dev | sh
